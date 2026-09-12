@@ -1,6 +1,5 @@
-import .c
-import .asm
-import .docker
-import .html
-
+from . import c
+from . import asm
+from . import docker
+from . import html
 
