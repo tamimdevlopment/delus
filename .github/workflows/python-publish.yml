@@ -2,8 +2,7 @@ name: Publish to PyPI
 
 on:
   release:
-    types: [published] # يشتغل السكربت تلقائياً أول ما تسوي ريليس جديد في جيتهاب
-
+    types: [published]
 jobs:
   build-n-publish:
     name: Build and publish Delus to PyPI
