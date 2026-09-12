@@ -29,7 +29,7 @@ class Mylang:
                 inner_code = self.func.code[self.start_index:]
                 del self.func.code[self.start_index:]
 
-                formatted = ["\tif ({}\n".format(self.condintion + ") {")]
+                formatted = ["\t{}\n".format(self.condintion)]
                 for line in inner_code:
                     formatted.append("\t" + line)
                 formatted.append("\t}\n")
@@ -60,6 +60,16 @@ class Mylang:
                     formatted.append("\t" + line)
                 formatted.append("\t}\n")
                 self.func.code.extend(formatted)
+        def else_if_condition(self, condintion: str):
+            scope = self._IF()
+            scope.func = self
+            scope.condintion = "else if (" + condintion + ") {"
+            return scope
+        def else_scope(self):
+            scope = self._IF()
+            scope.func = self
+            scope.condintion = "else {"
+            return scope
         def for_loop(self,variable_assignment:str,condintion:str,update:str):
             scope = self._FOR()
             scope.func = self
@@ -75,12 +85,13 @@ class Mylang:
         def if_condintion(self,condintion:str):
             scope = self._IF()
             scope.func = self
-            scope.condintion = condintion
+            scope.condintion =  "if (" + condintion  + ") {"
             return scope
         def call(self,function:str,args:str = "()"):
             self.code.append("\t{}{};\n".format(function,args))
         def return_val(self,return_value:str):
             self.code.append("\treturn {};\n".format(return_value))
+        
     def run(self):
         return "".join(self.code)
     
@@ -91,8 +102,12 @@ if __name__ == "__main__":
     with program.function(program,"main","int") as main:
         with main.for_loop("int i = 0","i<10","i++"):
             with main.if_condintion("i % 2 == 0"):
+                main.print(r"even : ")
                 main.print("i",variable=True)
+                main.print(r"\n")
+            with main.else_if_condition("i % 2 == 1"):
+                main.print("odd : ")
+                main.print("i",variable=True)
+                main.print(r"\n")
         main.return_val("0")
-            
-
     print(program.run())
