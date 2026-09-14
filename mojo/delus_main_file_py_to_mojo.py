@@ -1,6 +1,26 @@
 class Mojo:
     def __init__(self):
+        self.imports = []
         self.code = []
+    def addlibrary(self,library:str):
+        self.imports.append("import {}\n".format(library))
+    class struct:
+        def __init__(self,parent,struct_name:str):
+            self.parent = parent
+            self.struct_name = struct_name
+        def __enter__(self):
+            self.start_index = len(self.parent.code)
+            return self
+        def assign_variable(self,variable_name:str,type:str):
+            self.parent.code.append("var {}:{}\n".format(variable_name,type))
+        def __exit__(self, exc_type, exc, tb):
+            code = self.parent.code[self.start_index:]
+            del self.parent.code[self.start_index:]
+            formatted = ["struct {}:\n".format(self.struct_name)]
+            for i in code:
+                formatted.append("\t" + i)
+            formatted.append("\n")
+            self.parent.code.extend(formatted)
     class fn:
         def __init__(self,parent,function_name:str,return_Value:str,args:str="",):
             self.parent = parent
@@ -60,7 +80,7 @@ class Mojo:
         def while_loop(self,condition:str):
             scope = self._WHILE()
             scope.condition = condition
-            self.parent = self.parent
+            scope.parent = self.parent
             return scope
         def if_condition(self,condition:str):
             scope = self._IF()
@@ -80,7 +100,7 @@ class Mojo:
         def print(self,text:str):
             self.parent.code.append("print({})\n".format(text))
         def return_value(self,value):
-            self.parent.code.append("return {}".format(value))
+            self.parent.code.append("return {}\n".format(value))
         def assign_variable(self, variable_name: str, value, var_type: str = ""):
             if var_type == "":
                 self.parent.code.append("var {} = {}\n".format(variable_name, value))
@@ -91,7 +111,10 @@ class Mojo:
         def comment(self,text:str):
             self.parent.code.append("# {}\n".format(text))
     def run(self):
-        return "".join(self.code)
+        self.imports.extend(self.code)
+        self.code = []
+        self.imports.append("\n\n")
+        return "".join(self.imports)
         
 
 if __name__ == "__main__":
