@@ -1,5 +1,6 @@
 # Delus
 # pypi project : https://pypi.org/project/delus/
+# github : https://github.com/tamimdevlopment/delus
 A set of super lightweight, zero-dependency code generators and compilers written in pure Python. It provides automated context managers (`with` scopes) to generate clean, highly-optimized C and Assembly code without the overhead of heavy Abstract Syntax Trees (AST).
 
 ## Why this exists?
