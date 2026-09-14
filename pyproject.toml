@@ -16,7 +16,10 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
+license = {text = "GPL-3.0"}
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["*"]
+include = ["delus"]
+namespaces = false
+[tool.setuptools.package-data]
+"delus" = ["*.py"]
